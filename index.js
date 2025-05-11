@@ -1,9 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import propertyRouter from './routes/property.js';
+import dotenv from 'dotenv';
 import helmet from 'helmet';
+import propertyRouter from './routes/property.js';
 
 const app = express();
+dotenv.config();
+
 
 app.use(helmet());
 app.use(
@@ -25,3 +28,5 @@ app.use('/api', propertyRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+console.log(process.env.DB_HOST)
