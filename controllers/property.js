@@ -12,11 +12,11 @@ import pool from "../utils/db.js";
 // POST create new property
 export const createProperty = async (req, res, next) => {
     try {
-        const {title, location, price, image} = req.body;
+        const {title, location, price, details, image} = req.body;
 
         const [result] = await pool.query(
-            'INSERT INTO properties (title, location, price, image) VALUES (?, ?, ?, ?)',
-            [title, location, price, image]
+            'INSERT INTO properties (title, location, price, details, image) VALUES (?, ?, ?, ?, ?)',
+            [title, location, price, details, image]
         );
 
         res.status(201).json({
@@ -55,4 +55,35 @@ export const getPropertyById = async (req, res, next) => {
         next(error)
     }
 }
+
+export const updateProperty = async (req, res, next) => {
+    const { id } = req.params; // Property ID from the URL
+    const updates = req.body; // Fields to update
+
+    try {
+        // Generate dynamic SQL query based on the fields provided
+        const fields = Object.keys(updates)
+            .map((field) => `${field} = ?`)
+            .join(', ');
+        const values = Object.values(updates);
+
+        // Add the property ID as the last parameter
+        values.push(id);
+
+        // Perform the update
+        const [result] = await pool.query(
+            `UPDATE properties SET ${fields} WHERE id = ?`,
+            values
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Property not found or no changes were made.' });
+        }
+
+        res.status(200).json({ message: 'Property updated successfully.' });
+    } catch (error) {
+        next(error);
+    }
+};
+
 

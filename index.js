@@ -8,18 +8,6 @@ const app = express();
 
 
 
-// app.use(helmet());
-// app.use(
-//     helmet.contentSecurityPolicy({
-//         directives: {
-//             defaultSrc: ["'self'"],
-//             fontSrc: ["'self'", "https://property-listing-api-production.up.railway.app", "data:"],
-//             styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles if required
-//           },
-//     })
-// )
-
-
 app.use(cors());
 app.use(express.json());
 
